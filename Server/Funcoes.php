@@ -1,0 +1,275 @@
+<?php
+
+include_once '../System/alertas.php'; // Inclui o arquivo de alertas
+include_once 'Server.php'; // Inclui o arquivo de conexao com o banco de dados
+
+function valorExiste($conexao, string $campo, string $valor): bool {
+    $query = "SELECT 1 FROM Users WHERE $campo = :valor LIMIT 1";
+    $stmt = $conexao->prepare($query);
+    $stmt->bindParam(':valor', $valor);
+    $stmt->execute();
+    return (bool) $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+function Cadastro($dados) {
+    echo "<pre>";
+    print_r($dados);
+    echo "</pre>";
+
+    $conexao = conectar();
+
+    $nome = trim($dados['nome']);
+    $senha = trim($dados['senha']);
+    $niki = trim($dados['niki']);
+    $email = trim($dados['email']);
+
+    //criptografar a senha
+    $senha = password_hash($senha, PASSWORD_DEFAULT);
+
+    //verifica se realmete e um email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        adicionarAlerta('erro', 'Tipo de email inválido!');
+        header('Location: ../index.php');
+        exit;
+    }
+
+    //verifica se o email existe
+    if (valorExiste($conexao, 'Email', $email)) {
+        adicionarAlerta('erro', 'Email já cadastrado!');
+        header('Location: ../index.php');
+        exit;
+    }
+
+    //verifica se o niki existe
+    if (valorExiste($conexao, 'Niki', $niki)) {
+        adicionarAlerta('erro', 'Niki já cadastrado!');
+        header('Location: ../index.php');
+        exit;
+    }
+
+
+    $stmt = $conexao->prepare("INSERT INTO Users (Nome, Senha, Niki, Email) VALUES (:nome, :senha, :niki, :email)");
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':senha', $senha);
+    $stmt->bindParam(':niki', $niki);
+    $stmt->bindParam(':email', $email);
+    if ($stmt->execute()) {
+        adicionarAlerta('sucesso', 'Cadastro realizado com sucesso!');
+        header('Location: ../index.php');
+        exit;
+    } else {
+        adicionarAlerta('erro', 'Erro ao cadastrar. Tente novamente.');
+        header('Location: ../index.php');
+        exit;
+    }
+    
+    
+    header('Location: ../index.php');
+    exit;
+}
+
+function Login($dados) {
+    $conexao = conectar();
+    $email = trim($dados['email']);
+    $senha = trim($dados['senha']);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        adicionarAlerta('erro', 'Formato de email inválido!');
+        header('Location: ../index.php');
+        exit;
+    }
+
+    // Busca o usuário
+    $stmt = $conexao->prepare("SELECT * FROM Users WHERE Email = :email LIMIT 1");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        adicionarAlerta('erro', 'Email não cadastrado!');
+        header('Location: ../index.php');
+        exit;
+    }
+
+    if (password_verify($senha, $usuario['Senha'])) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
+        session_start();
+        session_regenerate_id(true); // Evita session fixation
+
+        $_SESSION['usuario'] = [
+            'id' => $usuario['ID'],
+            'nome' => $usuario['Nome'],
+            'niki' => $usuario['Niki'],
+            'img' => $usuario['Img'],
+            'email' => $usuario['Email'],
+        ];
+
+        adicionarAlerta('sucesso', 'Login realizado com sucesso!');
+        header('Location: ../Home/Home.php');
+        exit;
+    } else {
+        adicionarAlerta('erro', 'Senha incorreta!');
+        header('Location: ../index.php');
+        exit;
+    }
+}
+
+function TrocaImg($arquivo, $dados) {
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+
+    // Define a pasta do usuário
+    $pasta = "../Users/{$id}/Img/";
+
+    // Cria a pasta se não existir
+    if (!is_dir($pasta)) {
+        if (!mkdir($pasta, 0777, true)) {
+            adicionarAlerta('erro', 'Erro ao criar diretório para imagens do usuário.');
+            header('Location: ../Home/Perfil/Perfil.php');
+            exit;
+        }
+    }
+
+    // Verifica a quantidade de arquivos na pasta e apaga o mais antigo se ultrapassar 3 imagens
+    $itens = array_diff(scandir($pasta), array('.', '..')); // Remove '.' e '..' da contagem
+    if (count($itens) >= 3) {
+        $arquivo_antigo = $pasta . min($itens); // Pega o arquivo mais antigo (alfabeticamente)
+        if (!unlink($arquivo_antigo)) {
+            adicionarAlerta('erro', 'Erro ao deletar imagem antiga!');
+            header('Location: ../Home/Perfil/Perfil.php');
+            exit;
+        }
+        adicionarAlerta('aviso', 'Limite de imagens atingido. A imagem mais antiga foi removida.');
+    }
+
+    // Sanitiza e gera novo nome de arquivo
+    $extensao = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));
+
+    // Verifica se a extensão é realmente de imagem
+    if (!in_array($extensao, ['jpg', 'jpeg', 'png', 'gif'])) {
+        adicionarAlerta('erro', 'Somente imagens JPG, JPEG, PNG e GIF são permitidas!');
+        header('Location: ../Home/Perfil/Perfil.php');
+        exit;
+    }
+
+    // Verifica se o arquivo é uma imagem válida
+    if (!getimagesize($arquivo['tmp_name'])) {
+        adicionarAlerta('erro', 'O arquivo enviado não é uma imagem válida!');
+        header('Location: ../Home/Perfil/Perfil.php');
+        exit;
+    }
+
+    // Gera um nome único para o arquivo
+    $novo_nome = uniqid('img_', true) . '.' . $extensao;
+    $caminho = $pasta . $novo_nome;
+
+    // Move o arquivo para a pasta e atualiza o banco de dados
+    if (move_uploaded_file($arquivo['tmp_name'], $caminho)) {
+        $stmt = $conexao->prepare("UPDATE Users SET Img = :img WHERE ID = :id");
+        $stmt->bindParam(':img', $novo_nome);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        // Atualiza a imagem na sessão
+        $_SESSION['usuario']['img'] = $novo_nome;
+
+        adicionarAlerta('sucesso', 'Imagem de perfil atualizada com sucesso!');
+        header('Location: ../Home/Perfil/Perfil.php');
+        exit;
+    } else {
+        adicionarAlerta('erro', 'Erro ao salvar a imagem no servidor.');
+        header('Location: ../Home/Home.php');
+        exit;
+    }
+}
+
+function ExcluirImg($dados) {
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+
+    // Define a pasta do usuário
+    $pasta = "../Users/{$id}/Img/";
+
+    // Verifica se a pasta do usuário existe
+    if (!is_dir($pasta)) {
+        adicionarAlerta('erro', 'Pasta de imagens não encontrada!');
+        header('Location: ../Home/Home.php');
+        exit;
+    }
+
+    // Determina o caminho da imagem a ser excluída
+    $img_a_excluir = $pasta . $dados['img'];
+
+    // Verifica se a imagem a ser excluída existe
+    if (!file_exists($img_a_excluir)) {
+        adicionarAlerta('erro', 'Imagem não encontrada!');
+        header('Location: ../Home/Perfil/Perfil.php');
+        exit;
+    }
+
+    // Se for a imagem atual do usuário, atualiza para 'Padrao.png'
+    if ($_SESSION['usuario']['img'] == $dados['img']) {
+        $stmt = $conexao->prepare("UPDATE Users SET Img = 'Padrao.png' WHERE ID = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        // Atualiza a sessão com a imagem padrão
+        $_SESSION['usuario']['img'] = 'Padrao.png';
+        adicionarAlerta('aviso', 'Imagem excluída. A imagem padrão foi restaurada.');
+    }
+
+    // Exclui a imagem do servidor
+    if (unlink($img_a_excluir)) {
+        adicionarAlerta('sucesso', 'Imagem excluída com sucesso!');
+    } else {
+        adicionarAlerta('erro', 'Erro ao excluir a imagem!');
+    }
+
+    // Redireciona para o perfil
+    header('Location: ../Home/Perfil/Perfil.php');
+    exit;
+}
+
+function SelecionarImg($dados) {
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+
+    // Define a pasta do usuário
+    $pasta = "../Users/{$id}/Img/";
+
+    // Verifica se a pasta do usuário existe
+    if (!is_dir($pasta)) {
+        adicionarAlerta('erro', 'Pasta de imagens não encontrada!');
+        header('Location: ../Home/Home.php');
+        exit;
+    }
+
+    // Determina o caminho da imagem a ser selecionada
+    $img_a_selecionar = $pasta . $dados['img'];
+
+    // Verifica se a imagem a ser selecionada existe
+    if (!file_exists($img_a_selecionar)) {
+        adicionarAlerta('erro', 'Imagem não encontrada!');
+        header('Location: ../Home/Perfil/Perfil.php');
+        exit;
+    }
+
+    // Atualiza a imagem no banco de dados e na sessão
+    $stmt = $conexao->prepare("UPDATE Users SET Img = :img WHERE ID = :id");
+    $stmt->bindParam(':img', $dados['img']);
+    $stmt->bindParam(':id', $id);
+    if ($stmt->execute()) {
+        $_SESSION['usuario']['img'] = $dados['img'];
+        adicionarAlerta('sucesso', 'Imagem selecionada com sucesso!');
+    } else {
+        adicionarAlerta('erro', 'Erro ao selecionar a imagem!');
+    }
+
+    // Redireciona para o perfil
+    header('Location: ../Home/Perfil/Perfil.php');
+    exit;
+}
+?>

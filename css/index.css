@@ -1,0 +1,221 @@
+/* Tema Galáxia para Index */
+
+/* Reset e configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Efeito de fundo da galáxia */
+body {
+    background: linear-gradient(to bottom, #0c0118, #1a0933, #150426);
+    background-attachment: fixed;
+    color: #e0e0ff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Estrelas no fundo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px);
+    background-size: 50px 50px;
+    opacity: 0.3;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background: rgba(20, 12, 40, 0.6);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px 2px rgba(138, 43, 226, 0.3);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    animation: pulse 3s infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 15px 2px rgba(138, 43, 226, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 20px 5px rgba(138, 43, 226, 0.5);
+    }
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #9d68ff;
+    text-shadow: 0 0 8px rgba(157, 104, 255, 0.6);
+}
+
+.header h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: #68c5ff;
+}
+
+.header h4 {
+    color: #ff68a2;
+    font-size: 1.1rem;
+}
+
+/* Grid para cadastro e login */
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "header header"
+            "cadastro login";
+    }
+    
+    .header {
+        grid-area: header;
+    }
+    
+    .Cadastro {
+        grid-area: cadastro;
+    }
+    
+    .Login {
+        grid-area: login;
+    }
+}
+
+/* Estilo para os formulários */
+.Cadastro, .Login {
+    padding: 2rem;
+    border-radius: 12px;
+    background: rgba(20, 12, 40, 0.7);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(76, 0, 255, 0.3);
+    border: 1px solid rgba(76, 0, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Cadastro:hover, .Login:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(76, 0, 255, 0.4);
+}
+
+.Cadastro h2, .Login h2 {
+    color: #9d68ff;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 0 0 5px #9d68ff;
+}
+
+/* Estilo dos formulários */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    color: #68c5ff;
+    font-size: 0.9rem;
+}
+
+input {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #4c00ff;
+    background: rgba(0, 0, 20, 0.3);
+    color: #e0e0ff;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 4px rgba(138, 43, 226, 0.2);
+}
+
+input:focus {
+    outline: none;
+    border-color: #68c5ff;
+    box-shadow: 0 0 8px rgba(104, 197, 255, 0.6);
+}
+
+button {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(45deg, #4c00ff, #9d68ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.5);
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #5c20ff, #ad78ff);
+    box-shadow: 0 5px 15px rgba(157, 104, 255, 0.7);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Compatibilidade com sistema de alertas */
+.sistema-alertas {
+    z-index: 1100 !important;
+}
+
+/* Estrelas brilhantes animadas */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+/* Adicione 50 estrelas com animação aleatória */
+.star:nth-child(1) { left: 10%; top: 20%; animation: twinkle 3s infinite 0.3s; }
+.star:nth-child(2) { left: 25%; top: 15%; animation: twinkle 4s infinite 0.7s; }
+.star:nth-child(3) { left: 35%; top: 25%; animation: twinkle 3.5s infinite 1s; }
+.star:nth-child(4) { left: 45%; top: 10%; animation: twinkle 4.5s infinite 1.2s; }
+.star:nth-child(5) { left: 55%; top: 30%; animation: twinkle 3s infinite 0.5s; }
+/* Continue com mais estrelas se desejar */
