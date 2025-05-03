@@ -8,7 +8,7 @@
 function CorrigirImg(string $img, int $nivel = 0): string {
     $prefixo = str_repeat("../", $nivel);
     $caminhoBase = $prefixo . "img/";
-    $caminhoUser = $prefixo . "Users/{$_SESSION['usuario']['id']}/img/";
+    $caminhoUser = $prefixo . "Users/{$_SESSION['usuario']['id']}/Img/";
 
     // Se for uma URL externa, retorna como está
     if (preg_match('/^(http|https):\/\//', $img)) {

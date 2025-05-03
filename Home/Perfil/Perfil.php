@@ -2,6 +2,11 @@
 // Inicia a sessão (verifica se a sessão está aberta)
 session_start();
 
+// Definir o cabeçalho HTTP para cache de 20 mim (1200 segundos)
+header("Cache-Control: max-age=1200, must-revalidate");
+header("Pragma: public");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() + 1200) . " GMT");
+
 if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
     header('Location: ../Home.html');
     exit;
@@ -20,6 +25,7 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],2);
+echo $IMG_USER;
 
 $FILE_USER = "../../Users/{$_SESSION['usuario']['id']}/"
 

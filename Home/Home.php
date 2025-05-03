@@ -2,6 +2,11 @@
 // Inicia a sessão (verifica se a sessão está aberta)
 session_start();
 
+// Definir o cabeçalho HTTP para cache de 1 hora (3600 segundos)
+header("Cache-Control: max-age=3600, must-revalidate");
+header("Pragma: public");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
+
 if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
     header('Location: Home.html');
     exit;
