@@ -1,0 +1,168 @@
+/* CSS Formal para Página de Notícia Individual */
+
+/* Reset e configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+    padding-bottom: 2rem;
+}
+
+/* Barra superior */
+.Top_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background: #1a1a1a;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.Top_bar_Img img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.Top_bar_lista_atalhos ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.Top_bar_lista_atalhos a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.Top_bar_lista_atalhos a:hover {
+    background: #444;
+    border-radius: 3px;
+}
+
+/* Container da notícia */
+.noticia-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.noticia-container h1 {
+    font-family: 'Times New Roman', serif;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #222;
+    border-bottom: 1px solid #222;
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.noticia {
+    margin-top: 1.5rem;
+}
+
+.noticia-conteudo h2 {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.7rem;
+    color: #222;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.noticia-conteudo h3 {
+    font-size: 1.2rem;
+    color: #555;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.noticia-imagem {
+    display: block;
+    max-width: 100%;
+    max-height: 350px;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    border: 1px solid #eee;
+    object-fit: cover;
+}
+
+.noticia-conteudo p {
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 0.7rem;
+    text-align: left;
+}
+
+.noticia-texto p {
+    margin-bottom: 1.1rem;
+    text-align: justify;
+    text-indent: 2em;
+}
+
+.noticia-conteudo strong {
+    color: #222;
+}
+
+.noticia-container a {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    background: #f1f1f1;
+    transition: background 0.2s, color 0.2s;
+}
+
+.noticia-container a:hover {
+    background: #0056b3;
+    color: #fff;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .noticia-container {
+        padding: 1rem;
+    }
+    .noticia-imagem {
+        max-height: 200px;
+    }
+    .Top_bar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .Top_bar_lista_atalhos ul {
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

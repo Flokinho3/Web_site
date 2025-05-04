@@ -2,10 +2,6 @@
 // Inicia a sessão (verifica se a sessão está aberta)
 session_start();
 
-// Definir o cabeçalho HTTP para cache de 1 hora (3600 segundos)
-header("Cache-Control: max-age=3600, must-revalidate");
-header("Pragma: public");
-header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
 
 if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
     header('Location: Home.html');
@@ -42,6 +38,7 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
         <div class="Top_bar_lista_atalhos">
             <ul>
                 <li><a href="Home.php">Home</a></li>
+                <li><a href="../Jornal/Home.php">Jornal</a></li>
                 <li><a href="../Server/Sair.php">Sair</a></li>
             </ul>
         </div>
@@ -51,8 +48,9 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
         <h1>Lista de projetos!</h1>
         <div class="projetos">
             <div class="projeto">
-                <h2>Projeto 1</h2>
-                <p>Descrição do projeto 1.</p>
+                <h2>Jornal-Local</h2>
+                <p>Um pequeno jornal com as informaçoes locais!</p>
+                <a href="../Jornal/Home.php">Acessar</a>
             </div>
             <div class="projeto">
                 <h2>Projeto 2</h2>
