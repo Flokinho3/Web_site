@@ -24,6 +24,21 @@
         "data": "2025-05-03",
         "titulo": "Boas práticas e segurança",
         "descricao": "Aplicadas validações de sessão, uso de htmlspecialchars, checagem de arquivos com file_exists, e planejamento para logs e permissões."
+      },
+      {
+        "data": "2025-05-04",
+        "titulo": "Sistema de Publicaçao de posts",
+        "descricao": "Apos muinto tentativa e erro, consegui criar um sistema de publicaçao de posts, onde o usuario pode criar um post, e ele é salvo em um arquivo JSON na pasta Noticias."
+      },
+      {
+        "data": "2025-05-04",
+        "titulo": "Sistema de Visualizaçao de posts",
+        "descricao": "Criei um sistema de visualizaçao de posts, onde o usuario pode ver todos os posts criados, e clicar em um deles para ver o conteudo completo."
+      },
+      {
+        "data": "2025-05-04",
+        "titulo": "Sistema de Visualizaçao de posts",
+        "descricao": "Correçao de exibiçao! agora e usado links para acessar os posts, e o conteudo completo é exibido em uma nova pagina."
       }
     ]
   } 
