@@ -41,6 +41,11 @@ $corFundo       = htmlspecialchars($dados['Cor_fundo'] ?? '#FFFFFF');
 $categoria      = $dados['Categoria'] ?? 'Não categorizado';
 $imagemNoticia  = $dados['Imagem'] ?? 'Users/1/Img/img_padrao.png';
 $linkOriginal   = $dados['link'] ?? '#';
+
+// Verifica se a imagem realmente existe
+$exibirImagem = !empty($imagemNoticia) && file_exists($imagemNoticia) && !is_dir($imagemNoticia);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -74,10 +79,11 @@ $linkOriginal   = $dados['link'] ?? '#';
         <p><strong>Data:</strong> <?= htmlspecialchars($dataPublicacao) ?></p>
         <p><strong>Autor:</strong> <?= htmlspecialchars($autor) ?></p>
 
+        <?php if ($exibirImagem): ?>
         <div class="noticia-imagem" style="background-color: <?= $corFundo ?>;">
-            <img src="<?= htmlspecialchars($imagemNoticia) ?>" alt="Imagem da notícia"
-                 onerror="this.src='Users/1/Img/img_padrao.png';">
+            <img src="<?= htmlspecialchars($imagemNoticia) ?>" alt="Imagem da notícia">
         </div>
+        <?php endif; ?>
 
         <div class="noticia-conteudo" style="background-color: <?= $corFundo ?>;">
             <?= $conteudoHtml ?>
