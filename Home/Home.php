@@ -35,6 +35,7 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
             <ul>
                 <li><a href="Home.php">Home</a></li>
                 <li><a href="../Jornal/Home.php">Jornal</a></li>
+                <li><a href="../Update.php">Updates</a></li>
                 <li><a href="../Server/Sair.php">Sair</a></li>
             </ul>
         </div>

@@ -74,7 +74,7 @@ $pastas = glob($dir . '*', GLOB_ONLYDIR); // Pega todas as pastas dentro do dire
                             $imagem = htmlspecialchars($dados['imagem']);
 
                             echo "<div class='noticia-item' style='border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 20px; padding: 15px; background: rgba(255, 255, 255, 0.8);'>";
-                            echo "<h3 style='color: #333;'><a href='noticia.php?id=$id&data=$data_publicacao' style='text-decoration: none; color: #007BFF;'>$titulo</a></h3>";
+                            echo "<h3 style='color: #333;'><a href='Noticia.php?id=$id&data=$data_publicacao' style='text-decoration: none; color: #007BFF;'>$titulo</a></h3>";
                             echo "<p style='color: #555;'>$resumo</p>";
                             echo "<p style='color: #777;'><strong>Data:</strong> $data_publicacao</p>";
                             echo "<img src='$imagem' alt='Imagem da notícia' class='noticia-imagem'>";
