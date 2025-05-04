@@ -12,10 +12,6 @@ include_once '../System/alertas.php'; // Inclui o arquivo de alertas
 include_once '../System/Redirecionar.php'; // Inclui o arquivo de redirecionamento
 
 
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-
 $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
 
 ?>
