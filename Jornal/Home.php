@@ -11,16 +11,11 @@ include_once '../System/Redirecionar.php';
 
 $IMG_USER = CorrigirImg($_SESSION['usuario']['img'], 1);
 
-// teste de alerta
-adicionarAlerta('sucesso', 'Teste de alerta!');
-
-$dir = "Noticias/"; // Caminho do arquivo JSON
+$dir = "Noticias/";
 if (!is_dir($dir)) {
     mkdir($dir, 0777, true);
 }
-$arquivos = glob($dir . '*.json'); // Pega todos os JSONs da pasta
-$pastas = glob($dir . '*', GLOB_ONLYDIR); // Pega todas as pastas dentro do diretório
-
+$pastas = glob($dir . '*', GLOB_ONLYDIR);
 ?>
 
 <!DOCTYPE html>
@@ -28,67 +23,70 @@ $pastas = glob($dir . '*', GLOB_ONLYDIR); // Pega todas as pastas dentro do dire
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jornal Regional | Notícias Locais</title>
+    <title>Gazeta Regional - Últimas Notícias</title>
     <link rel="stylesheet" href="../css/Jornal_Home.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <div class="Top_bar">
+
+    <!-- TOPO FIXO -->
+    <header class="Top_bar">
         <div class="Top_bar_Img">
             <a href="../Home/Perfil/Perfil.php">
-                <img src="<?php echo htmlspecialchars($IMG_USER); ?>" alt="Imagem do usuário" class="Top_bar_Img_usuario">
+                <img src="<?php echo htmlspecialchars($IMG_USER); ?>" alt="Imagem do Editor">
             </a>
         </div>
-        <div class="Top_bar_lista_atalhos">
+        <nav class="Top_bar_lista_atalhos">
             <ul>
-                <li><a href="Home.php">Home</a></li>
-                <li><a href="../Server/Sair.php">Sair</a></li>
+                <li><a href="Home.php">Primeira Página</a></li>
+                <li><a href="Editor.php">Redação</a></li>
+                <li><a href="../Server/Sair.php">Encerrar Leitura</a></li>
             </ul>
-        </div>
-    </div>
-    
-    <h1>Bem-vindo ao Jornal Local</h1>
-    <p>Aqui você encontrará as últimas notícias e informações da sua região.</p>
-    
-    <div class="noticias">
+        </nav>
+    </header>
+
+    <!-- TÍTULO -->
+    <h1>Gazeta Regional</h1>
+    <p>Seu informativo de confiança desde 1900 — agora com menos chumbo.</p>
+
+    <!-- CONTEÚDO DE NOTÍCIAS -->
+    <section class="noticias">
         <h2>Últimas Notícias</h2>
         <div class="noticia">
-            <?php
-            if (empty($pastas)) {
-                echo "<p>Sem notícias no momento...</p>";
-            } else {
-                foreach ($pastas as $pasta) {
-                    if (!is_dir($pasta)) {
-                        continue; // Ignora se não for uma pasta
-                    }
-                    $jsonFiles = glob($pasta . '/*.json');
-                    foreach ($jsonFiles as $jsonFile) {
-                        if (!file_exists($jsonFile)) {
-                            continue; // Ignora se o arquivo JSON não existir
-                        }
-                        $dados = json_decode(file_get_contents($jsonFile), true);
-                        if (isset($dados['id'])) {
-                            $id = htmlspecialchars($dados['id']);
-                            $titulo = htmlspecialchars($dados['titulo']);
-                            $resumo = htmlspecialchars($dados['resumo']);
-                            $data_publicacao = htmlspecialchars($dados['data_publicacao']);
-                            $imagem = htmlspecialchars($dados['imagem']);
+        <?php
+        foreach ($pastas as $pasta) {
+            $arquivos = glob($pasta . '/*.json');
+            foreach ($arquivos as $arquivo) {
+                $noticia = json_decode(file_get_contents($arquivo), true);
+                if (isset($noticia['Titulo']) && isset($noticia['data'])):
+        ?>
+            <article class="noticia-item">
+                <h3><a href="Noticia.php?file=<?php echo urlencode($arquivo); ?>">
+                    <?php echo htmlspecialchars($noticia['Titulo']); ?>
+                </a></h3>
+                <p class="materia-subtitulo"><?php echo htmlspecialchars($noticia['Subtitulo']); ?></p>
 
-                            echo "<div class='noticia-item' style='border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 20px; padding: 15px; background: rgba(255, 255, 255, 0.8);'>";
-                            echo "<h3 style='color: #333;'><a href='noticia.php?id=$id&data=$data_publicacao' style='text-decoration: none; color: #007BFF;'>$titulo</a></h3>";
-                            echo "<p style='color: #555;'>$resumo</p>";
-                            echo "<p style='color: #777;'><strong>Data:</strong> $data_publicacao</p>";
-                            echo "<img src='$imagem' alt='Imagem da notícia' class='noticia-imagem'>";
-                            echo "</div>";
-                        }
-                    }
-                }
+                <?php if (!empty($noticia['Imagem'])): ?>
+                    <img src="<?php echo htmlspecialchars($noticia['Imagem']); ?>" alt="Imagem da notícia" class="noticia-imagem">
+                <?php endif; ?>
 
+                <p><strong>Categoria:</strong> <?php echo htmlspecialchars($noticia['Categoria']); ?></p>
+                <p class="data">Publicado em: <?php echo htmlspecialchars($noticia['data']); ?></p>
+            </article>
+        <?php
+                endif;
             }
-            ?>
-    </div>
-    <?php sistemaAlertas('../img/News.gif'); // Exibe os alerta ?>
+        }
+        ?>
+        </div>
+    </section>
+
+    <!-- ALERTA -->
+    <?php sistemaAlertas('../img/News.gif'); ?>
+
+    <!-- RODAPÉ -->
     <footer>
-        <p>&copy; 2023 Jornal Regional. Todos os direitos reservados.</p>
+        <p>&copy; 1900–2025 Gazeta Regional. Impressa com tipos móveis e bytes.</p>
     </footer>
+
 </body>
 </html>

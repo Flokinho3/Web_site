@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Verifica login
 if (empty($_SESSION['usuario']['id'])) {
     header('Location: Home.html');
     exit;
@@ -10,57 +9,38 @@ if (empty($_SESSION['usuario']['id'])) {
 include_once '../System/alertas.php';
 include_once '../System/Redirecionar.php';
 
-$IMG_USER = CorrigirImg($_SESSION['usuario']['img'], 1);
-#http://localhost/xampp/Jornal/noticia.php?id=1234567890&data=03/05/2025
+$imagemUsuario = CorrigirImg($_SESSION['usuario']['img'], 1);
 
-// Pega a data da URL
-$data = $_GET['data'] ?? null;
-// Pega o ID da URL
-$id = $_GET['id'] ?? null;
-// Verifica se a data e o ID foram passados na URL
-if (empty($data) || empty($id)) {
-    header('Location: Home.php');
+// Pega o caminho do arquivo da URL
+$arquivo = $_GET['file'] ?? null;
+
+if (empty($arquivo) || !file_exists($arquivo)) {
+    adicionarAlerta('erro', 'Arquivo de notícia inválido ou não encontrado!');
+    Redirecionar('Home.php');
     exit;
 }
 
-// Verifica se o ID é um número
-if (!is_numeric($id)) {
-    header('Location: Home.php');
+// Lê e decodifica o conteúdo JSON
+$conteudoJson = file_get_contents($arquivo);
+$dados = json_decode($conteudoJson, true);
+
+if (!$dados) {
+    adicionarAlerta('erro', 'Erro ao ler os dados da notícia!');
+    Redirecionar('Home.php');
     exit;
 }
 
-//subistitui "/" por "-"
-$data = str_replace("/", "-", $data);
-$dir = "Noticias/$data/Conteudos/";
-// Verifica se a pasta existe
-if (is_dir($dir)) {
-    // Exibe tudo dentro da pasta
-    $arquivos = glob($dir . '*.json'); // Pega todos os JSONs da pasta
-    foreach ($arquivos as $arquivo) {
-        // Pega o nome do arquivo sem a extensão
-        $nomeArquivo = pathinfo($arquivo, PATHINFO_FILENAME);
-        // Verifica se o ID do arquivo é igual ao ID da URL
-        if ($nomeArquivo == $id) {
-            // Lê o conteúdo do arquivo JSON
-            $conteudo = file_get_contents($arquivo);
-            // Decodifica o JSON para um array associativo
-            $dados = json_decode($conteudo, true);
-            break;
-        }
-    }
-} else {
-    // Caso a pasta não exista, inicializa $dados como vazio
-    $dados = [];
-}
-
-// Atribui com fallback padrão
-$tituloPagina = $dados['Titulo_pagina'] ?? "Jornal Regional | Notícias Locais";
-$titulo       = $dados['Titulo'] ?? "Título não encontrado";
-$subtitulo    = $dados['Subtitulo'] ?? "Subtítulo não encontrado";
-$data         = $dados['data'] ?? "Data não encontrada";
-$autor        = $dados['autor'] ?? "Autor não encontrado";
-$img          = $dados['Imagem'] ?? "../img/not_found.png";
-$texto        = $dados['Texto'] ?? ["Conteúdo não encontrado"];
+// Atribuições com fallback
+$tituloPagina   = $dados['Titulo_pagina'] ?? 'Notícia';
+$titulo         = $dados['Titulo'] ?? 'Título não disponível';
+$subtitulo      = $dados['Subtitulo'] ?? 'Subtítulo não disponível';
+$dataPublicacao = $dados['data'] ?? 'Data desconhecida';
+$autor          = $dados['Autor'] ?? 'Autor não identificado';
+$conteudoHtml   = $dados['Conteudo'] ?? '<p>Conteúdo não disponível.</p>';
+$corFundo       = htmlspecialchars($dados['Cor_fundo'] ?? '#FFFFFF');
+$categoria      = $dados['Categoria'] ?? 'Não categorizado';
+$imagemNoticia  = $dados['Imagem'] ?? 'Users/1/Img/img_padrao.png';
+$linkOriginal   = $dados['link'] ?? '#';
 ?>
 
 <!DOCTYPE html>
@@ -68,14 +48,14 @@ $texto        = $dados['Texto'] ?? ["Conteúdo não encontrado"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($tituloPagina); ?></title>
-    <link rel="stylesheet" href="../css/Jornal_Noticias.css?v=<?php echo time(); ?>">
+    <title><?= htmlspecialchars($tituloPagina) ?></title>
+    <link rel="stylesheet" href="../css/Jornal_Noticias.css?v=<?= time(); ?>">
 </head>
 <body>
     <div class="Top_bar">
         <div class="Top_bar_Img">
             <a href="../Home/Perfil/Perfil.php">
-                <img src="<?php echo htmlspecialchars($IMG_USER); ?>" alt="Imagem do usuário" class="Top_bar_Img_usuario">
+                <img src="<?= htmlspecialchars($imagemUsuario) ?>" alt="Imagem do usuário" class="Top_bar_Img_usuario">
             </a>
         </div>
         <div class="Top_bar_lista_atalhos">
@@ -89,24 +69,37 @@ $texto        = $dados['Texto'] ?? ["Conteúdo não encontrado"];
     <div class="noticia-container">
         <h1>Notícia</h1>
 
-        <div class="noticia">
-            <div class="noticia-conteudo">
-                <h2><?php echo htmlspecialchars($titulo); ?></h2>
-                <h3><?php echo htmlspecialchars($subtitulo); ?></h3>
-                <img src="<?php echo htmlspecialchars($img); ?>" alt="Imagem da notícia" class="noticia-imagem">
-                <p><strong>Data:</strong> <?php echo htmlspecialchars($data); ?></p>
-                <p><strong>Autor:</strong> <?php echo htmlspecialchars($autor); ?></p>
-                <div class="noticia-texto">
-                    <?php
-                    foreach ((array)$texto as $paragrafo) {
-                        echo "<p>" . htmlspecialchars($paragrafo) . "</p>";
-                    }
-                    ?>
-                </div>
-            </div>
+        <h2><?= htmlspecialchars($titulo) ?></h2>
+        <h3><?= htmlspecialchars($subtitulo) ?></h3>
+        <p><strong>Data:</strong> <?= htmlspecialchars($dataPublicacao) ?></p>
+        <p><strong>Autor:</strong> <?= htmlspecialchars($autor) ?></p>
+
+        <div class="noticia-imagem" style="background-color: <?= $corFundo ?>;">
+            <img src="<?= htmlspecialchars($imagemNoticia) ?>" alt="Imagem da notícia"
+                 onerror="this.src='Users/1/Img/img_padrao.png';">
         </div>
 
+        <div class="noticia-conteudo" style="background-color: <?= $corFundo ?>;">
+            <?= $conteudoHtml ?>
+        </div>
+
+        <p><strong>Categoria:</strong> <?= htmlspecialchars($categoria) ?></p>
+        <p>
+            <button onclick="compartilharNoticia()">Compartilhar</button>
+        </p>
+        <script>
+            function compartilharNoticia() {
+                const linkAtual = window.location.href;
+                navigator.clipboard.writeText(linkAtual).then(() => {
+                    alert('Link copiado para a área de transferência!');
+                }).catch(err => {
+                    alert('Erro ao copiar o link: ' + err);
+                });
+            }
+        </script>
         <p><a href="Home.php">Voltar</a></p>
     </div>
+
+    <?php sistemaAlertas('../img/News.gif'); ?>
 </body>
 </html>

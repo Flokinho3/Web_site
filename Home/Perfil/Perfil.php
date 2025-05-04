@@ -12,16 +12,11 @@ include_once '../../System/alertas.php'; // Inclui o arquivo de alertas
 include_once '../../System/Redirecionar.php'; // Inclui o arquivo de redirecionamento
 
 
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],2);
-echo $IMG_USER;
 
 $FILE_USER = "../../Users/".$_SESSION['usuario']['id']."/"; // Caminho para o diretório do usuário
 
