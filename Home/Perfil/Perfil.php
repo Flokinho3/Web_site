@@ -2,10 +2,6 @@
 // Inicia a sessão (verifica se a sessão está aberta)
 session_start();
 
-// Definir o cabeçalho HTTP para cache de 20 mim (1200 segundos)
-header("Cache-Control: max-age=1200, must-revalidate");
-header("Pragma: public");
-header("Expires: " . gmdate("D, d M Y H:i:s", time() + 1200) . " GMT");
 
 if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
     header('Location: ../Home.html');
@@ -27,7 +23,7 @@ if (empty($_SESSION['csrf_token'])) {
 $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],2);
 echo $IMG_USER;
 
-$FILE_USER = "../../Users/{$_SESSION['usuario']['id']}/"
+$FILE_USER = "../../Users/".$_SESSION['usuario']['id']."/"; // Caminho para o diretório do usuário
 
 ?>
 
@@ -49,6 +45,7 @@ $FILE_USER = "../../Users/{$_SESSION['usuario']['id']}/"
         <div class="Top_bar_lista_atalhos">
             <ul>
                 <li><a href="../Home.php">Home</a></li>
+                <li><a href="../../Jornal/Home.php">Jornal</a></li>
                 <li><a href="../../Server/Sair.php">Sair</a></li>
             </ul>
         </div>

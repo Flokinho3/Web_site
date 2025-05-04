@@ -1,0 +1,205 @@
+/* Tema Jornal Tradicional - Notícias em 2 colunas */
+
+/* Reset e configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: #f5f5f5;
+    color: #222;
+    line-height: 1.7;
+    padding-bottom: 2rem;
+}
+
+/* Barra superior */
+.Top_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #222;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.Top_bar_Img img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.Top_bar_lista_atalhos ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.Top_bar_lista_atalhos a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.Top_bar_lista_atalhos a:hover {
+    background: #444;
+}
+
+/* Cabeçalho do jornal */
+h1 {
+    font-family: 'Times New Roman', serif;
+    font-size: 2.7rem;
+    text-align: center;
+    margin: 2rem 0 0.5rem;
+    color: #222;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #222;
+    padding-bottom: 0.5rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Seção de notícias */
+.noticias {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.07);
+    border-radius: 10px;
+}
+
+.noticias h2 {
+    font-size: 1.7rem;
+    color: #222;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 1px;
+}
+
+.noticia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.noticia-item {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.2rem 1rem 1.5rem 1rem;
+    margin-bottom: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: box-shadow 0.2s, transform 0.2s;
+    min-height: 320px;
+}
+
+.noticia-item:hover {
+    box-shadow: 0 6px 24px rgba(34,34,34,0.12);
+    transform: translateY(-4px) scale(1.02);
+}
+
+.noticia-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+}
+
+.noticia-item h3 a {
+    color: #222;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.noticia-item h3 a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.noticia-item p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 0.7rem;
+}
+
+.noticia-item img.noticia-imagem {
+    width: 100%;
+    max-width: 320px;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 0.7rem 0 0.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    align-self: center;
+}
+
+.noticia-item .data {
+    font-size: 0.95rem;
+    color: #888;
+    margin-top: auto;
+    font-style: italic;
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 2rem 0 0 0;
+    color: #888;
+    font-size: 1rem;
+    margin-top: 2rem;
+}
+
+/* Responsividade */
+@media (max-width: 1000px) {
+    .noticia {
+        grid-template-columns: 1fr;
+    }
+    .noticia-item {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .noticias {
+        padding: 1rem 0.3rem;
+    }
+    .noticia-item {
+        padding: 1rem 0.5rem 1.2rem 0.5rem;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+}
