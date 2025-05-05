@@ -10,6 +10,7 @@ if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
 include_once '../System/alertas.php'; // Inclui o arquivo de alertas
 include_once '../System/Redirecionar.php'; // Inclui o arquivo de redirecionamento
 include_once '../Server/Funcoes.php'; // Inclui o arquivo de conexão com o banco de dados
+include_once '../Server/Seguranca.php'; // Inclui o arquivo de conexão com o banco de dados
 
 
 $FILE_INFOR = "../Users/".$_SESSION['usuario']['id']."/Notas/Valores.json";
