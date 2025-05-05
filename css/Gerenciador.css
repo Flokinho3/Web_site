@@ -1,0 +1,211 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Barra superior */
+.Top_bar {
+    background: linear-gradient(to right, #2c3e50, #3498db);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Área da imagem do usuário */
+.Top_bar_Img {
+    display: flex;
+    align-items: center;
+}
+
+.Top_bar_Img_usuario {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    transition: transform 0.3s ease;
+}
+
+.Top_bar_Img_usuario:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Lista de atalhos */
+.Top_bar_lista_atalhos ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.Top_bar_lista_atalhos li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.Top_bar_lista_atalhos li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Sidebar */
+.Sidebar {
+    width: 200px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: 100%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.Sidebar h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.Sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.Sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.Sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px;
+    display: block;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.Sidebar ul li a:hover {
+    background-color: #3498db;
+}
+
+/* Container */
+.container {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+.container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Gráficos */
+.Grafico-Valor-Total, .Grafico-Despessas-Total {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.Grafico-Valor-Total h2, .Grafico-Despessas-Total h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.Grafico-Valor-Total-img, .Grafico-Despessas-Total-img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Reset básico */
+/* ...existing code... */
+
+/* Formulários de Adicionar Saldo e Despesa */
+.Adicionar-Saldo, .Adicionar-Despesa {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Adicionar-Saldo h2, .Adicionar-Despesa h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.Adicionar-Saldo form, .Adicionar-Despesa form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+}
+
+.Adicionar-Saldo input, .Adicionar-Saldo select,
+.Adicionar-Despesa input, .Adicionar-Despesa select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.Adicionar-Saldo input:focus, .Adicionar-Saldo select:focus,
+.Adicionar-Despesa input:focus, .Adicionar-Despesa select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.Adicionar-Saldo button, .Adicionar-Despesa button {
+    padding: 12px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Adicionar-Saldo button:hover, .Adicionar-Despesa button:hover {
+    background-color: #2980b9;
+}
+
+/* ...existing code... */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

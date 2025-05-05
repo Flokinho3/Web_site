@@ -6,15 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once '../System/alertas.php';
 require_once 'Funcoes.php'; // Inclui o arquivo de funções de usuários
-
-// Verifica se o token CSRF é válido (sugestão de segurança)
-function verificarCsrfToken() {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        adicionarAlerta('erro', 'Token CSRF inválido!');
-        header('Location: ../index.php');
-        exit;
-    }
-}
+require_once 'Seguranca.php'; // Inclui o arquivo de segurança
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificação do token CSRF para prevenir CSRF attacks
@@ -97,6 +89,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Seleciona a imagem do usuário
         SelecionarImg($_POST);
+    } elseif ($acao === 'add_saldo') {
+        // Verifica se o usuário está logado
+        if (empty($_SESSION['usuario']['id'])) {
+            adicionarAlerta('erro', 'Você precisa estar logado para adicionar saldo!');
+            header('Location: ../index.php');
+            exit;
+        }
+
+        // Adiciona saldo ao usuário
+        AdicionarSaldo($_POST);
+    } elseif ($acao === 'add_despesa') {
+        // Verifica se o usuário está logado
+        if (empty($_SESSION['usuario']['id'])) {
+            adicionarAlerta('erro', 'Você precisa estar logado para adicionar despesa!');
+            header('Location: ../index.php');
+            exit;
+        }
+
+        // Adiciona despesa ao usuário
+        AdicionarDespesa($_POST);
+
+        exit;
     } else {
         adicionarAlerta('erro', 'Ação inválida!');
         header('Location: ../index.php');
@@ -107,5 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: ../index.php');
     exit;
 }
+
+
 
 ?>

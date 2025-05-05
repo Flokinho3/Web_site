@@ -53,6 +53,7 @@ $resumo = $_POST['resumo'];
 $conteudo = $_POST['conteudo'];
 $cor_fundo = $_POST['cor_fundo'];
 $categoria = $_POST['categoria'];
+$autor = $_POST['autor'];
 
 // Verifica se há imagem e faz o upload
 $imagem_path = '';
@@ -77,6 +78,7 @@ $noticia = [
     'Cor_fundo' => $cor_fundo,
     'Categoria' => $categoria,
     'Imagem' => $imagem_path,
+    'Autor' => $autor,
     'link' => 'Noticia.php /' . $data . '/' . uniqid() . '.json',
 ];
 

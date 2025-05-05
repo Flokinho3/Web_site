@@ -1,5 +1,24 @@
 <?php
 
+/*
+
+    Tabela: Despesas
+	Nome	Tipo	Colação	        Atributos	Nulo	
+	1	    ID	    int(11)			Não	        Nenhum				
+	2	    Saldo	float			Não	        Nenhum				
+	3	    Custo	float			Não	        Nenhum				
+	4	    Ganhos	float			Não	        Nenhum			
+    ================================================================
+    Tabela: Users
+    #	Nome	Tipo	    Colação	    	    Padrão		Extra	
+ 	1	ID      Primária	int(11)				Nenhum		AUTO_INCREMENT		
+ 	2	Nome	text	    utf8mb4_unicode_ci	Nenhum				
+  	3	Senha	text	    utf8mb4_unicode_ci	Nenhum				
+ 	4	Niki	text	    utf8mb4_unicode_ci	Nenhum				
+ 	5	Img	    text	    utf8mb4_unicode_ci	'Padrao.png'	
+
+*/
+
 include_once '../System/alertas.php'; // Inclui o arquivo de alertas
 include_once 'Server.php'; // Inclui o arquivo de conexao com o banco de dados
 
@@ -10,7 +29,6 @@ function valorExiste($conexao, string $campo, string $valor): bool {
     $stmt->execute();
     return (bool) $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 
 function Cadastro($dados) {
     echo "<pre>";
@@ -272,4 +290,176 @@ function SelecionarImg($dados) {
     header('Location: ../Home/Perfil/Perfil.php');
     exit;
 }
+
+function Dados_grafico() {
+    // $tipo sera uma lista com o nome das colunas a serem exibidas no grafico
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+    $stmt = $conexao->prepare("SELECT * FROM Despesas WHERE ID = :id LIMIT 1");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        adicionarAlerta('erro', 'Usuário não encontrado!');
+        return null;
+    }
+    $dados = [];
+    
+
+    $stmt = $conexao->prepare("SELECT * FROM Despesas WHERE ID = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $despesas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    return $despesas;
+}
+
+function AdicionarSaldo($dados) {
+    $FILE_Notas = "../Users/{$_SESSION['usuario']['id']}/Notas/Valores.json";
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+    $valor = trim($dados['valor']);
+    $descricao = trim($dados['descricao']);
+    $data = date('Y-m-d H:i:s');
+
+    // Validação do valor (não deve ser negativo ou zero)
+    if ($valor <= 0) {
+        adicionarAlerta('erro', 'Valor do saldo inválido!');
+        header('Location: ../Gerenciador/Adicionar.php');
+        exit;
+    }
+
+    adicionarAlerta('sucesso', 'Função AdicionarSaldo chamada!');
+    
+    // monta o array com os dados
+    $entradaDados = [
+        'id' => $id,
+        'valor' => $valor,
+        'descricao' => $descricao,
+        'data' => $data
+    ];
+
+    // Verifica se o caminho do arquivo existe, se não existir cria o arquivo
+    if (!is_dir(dirname($FILE_Notas))) {
+        mkdir(dirname($FILE_Notas), 0777, true);
+    }
+
+    if (file_exists($FILE_Notas)) {
+        $notas = json_decode(file_get_contents($FILE_Notas), true);
+    } else {
+        $notas = [];
+    }
+
+    $notas[] = $entradaDados;
+    file_put_contents($FILE_Notas, json_encode($notas, JSON_PRETTY_PRINT));
+
+    // Verifica se o ID do usuário existe no banco de dados
+    $stmt = $conexao->prepare("SELECT * FROM Despesas WHERE ID = :id LIMIT 1");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        // Se o usuário não existir, adiciona um novo registro
+        $stmt = $conexao->prepare("INSERT INTO Despesas (ID, Saldo) VALUES (:id, :valor)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':valor', $valor);
+        $stmt->execute();
+    } else {
+        // Se o usuário já existir, atualiza o saldo
+        $novo_saldo = $usuario['Saldo'] + $valor;
+        $stmt = $conexao->prepare("UPDATE Despesas SET Saldo = :saldo WHERE ID = :id");
+        $stmt->bindParam(':saldo', $novo_saldo);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
+
+    // Adiciona o log de adição de saldo
+    $logFile = "../Users/{$_SESSION['usuario']['id']}/Notas/Log.txt";
+    $logMessage = "Saldo de R$ {$valor} adicionado em " . date('Y-m-d H:i:s') . "\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+    
+    adicionarAlerta('sucesso', 'Saldo adicionado com sucesso!');
+    header('Location: ../Gerenciador/Adicionar.php');
+    exit;
+}
+
+
+function AdicionarDespesa($dados) {
+    $FILE_Notas = "../Users/{$_SESSION['usuario']['id']}/Notas/Valores.json";
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+    $valor = trim($dados['valor']);
+    $descricao = trim($dados['descricao']);
+    $data = date('Y-m-d H:i:s');
+
+    // Validação do valor (não deve ser negativo ou zero)
+    if ($valor <= 0) {
+        adicionarAlerta('erro', 'Valor da despesa inválido!');
+        header('Location: ../Gerenciador/Adicionar.php');
+        exit;
+    }
+
+    // monta o array com os dados
+    $entradaDados = [
+        'id' => $id,
+        'valor' => '-' . $valor,
+        'descricao' => $descricao,
+        'data' => $data
+    ];
+
+    // Verifica se o caminho do arquivo existe, se não existir cria o arquivo
+    if (!is_dir(dirname($FILE_Notas))) {
+        mkdir(dirname($FILE_Notas), 0777, true);
+    }
+
+    if (file_exists($FILE_Notas)) {
+        $notas = json_decode(file_get_contents($FILE_Notas), true);
+    } else {
+        $notas = [];
+    }
+
+    $notas[] = $entradaDados;
+    file_put_contents($FILE_Notas, json_encode($notas, JSON_PRETTY_PRINT));
+
+    // Verifica se o ID do usuário existe no banco de dados
+    $stmt = $conexao->prepare("SELECT * FROM Despesas WHERE ID = :id LIMIT 1");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        // Se o usuário não existir, adiciona um novo registro
+        $stmt = $conexao->prepare("INSERT INTO Despesas (ID, Custo) VALUES (:id, :valor)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':valor', $valor);
+        $stmt->execute();
+    } else {
+        // Se o usuário já existir, atualiza o custo
+        if ($usuario['Custo'] == null) {
+            $stmt = $conexao->prepare("UPDATE Despesas SET Custo = :custo WHERE ID = :id");
+            $stmt->bindParam(':custo', $valor);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        }
+        $novo_custo = $usuario['Custo'] + $valor;
+        $novo_saldo = $usuario['Saldo'] - $valor;
+        $stmt = $conexao->prepare("UPDATE Despesas SET Custo = :custo, Saldo = :saldo WHERE ID = :id");
+        $stmt->bindParam(':custo', $novo_custo);
+        $stmt->bindParam(':saldo', $novo_saldo);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
+
+    // Adiciona o log de adição de despesa
+    $logFile = "../Users/{$_SESSION['usuario']['id']}/Notas/Log.txt";
+    $logMessage = "Despesa de R$ {$valor} adicionada em " . date('Y-m-d H:i:s') . "\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+    adicionarAlerta('sucesso', 'Despesa adicionada com sucesso!');
+    header('Location: ../Gerenciador/Adicionar.php');
+    exit;
+}
+
 ?>

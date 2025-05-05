@@ -3,41 +3,12 @@ $FILE = "Update.json"; // Caminho do arquivo JSON
 
 //le o conteudo do arquivo JSON
 $conteudo = file_get_contents($FILE);
-/*
-
-{
-    "diario_evolucao": [
-      {
-        "data": "2025-05-01",
-        "titulo": "Estrutura inicial do sistema de jornal",
-        "descricao": "Definido o formato de armazenamento das notícias com pastas por data e arquivos JSON com IDs aleatórios. Layout estilo Pinterest decidido."
-      },
-      {
-        "data": "2025-05-02",
-        "titulo": "Desenvolvimento da Home.php",
-        "descricao": "Criação de script PHP que lista todos os arquivos JSON da pasta 'Noticias' e exibe os blocos com título, imagem, resumo e autor."
-      },
-      {
-        "data": "2025-05-03",
-        "titulo": "Sistema de exibição de notícias completas",
-        "descricao": "Criação da página 'noticia.php' que recebe ID e data via URL, localiza o JSON e exibe conteúdo completo da notícia (título, subtítulo, imagem, autor, parágrafos)."
-      },
-      {
-        "data": "2025-05-03",
-        "titulo": "Correção de bug em ambiente de produção",
-        "descricao": "Erro ao acessar a página no servidor devido a diferença entre 'Noticia.php' e 'noticia.php' (case-sensitive no Linux). Corrigido padronizando nomes para minúsculas."
-      },
-      {
-        "data": "2025-05-03",
-        "titulo": "Boas práticas e segurança",
-        "descricao": "Aplicadas validações de sessão, uso de htmlspecialchars, checagem de arquivos com file_exists, e planejamento para logs e permissões."
-      }
-    ]
-  } 
-  
 
 
-*/
+if ($conteudo === false) {
+    echo "<p>Erro ao ler o arquivo de atualizações.</p>";
+    exit;
+}
 
 ?>
 <!DOCTYPE html>
@@ -92,6 +63,7 @@ $conteudo = file_get_contents($FILE);
 </head>
 <body>
     <h1>Atualizações do Sistema</h1>
+    <a href="Home/Home.php">Voltar</a>
     <div class="diario_evolucao">
         <?php
         $dados = json_decode($conteudo, true);

@@ -4,7 +4,7 @@ session_start();
 
 
 if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
-    header('Location: Home.html');
+    header('Location: ../index.php');
     exit;
 }
 
@@ -50,8 +50,9 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
                 <a href="../Jornal/Home.php">Acessar</a>
             </div>
             <div class="projeto">
-                <h2>Projeto 2</h2>
-                <p>Descrição do projeto 2.</p>
+                <h2>Gerenciador de Despesas</h2>
+                <p>Um sistema para gerenciar suas despesas financeiras.</p>
+                <a href="../Gerenciador/Gerenciador.php">Acessar</a>
             </div>
             <div class="projeto">
                 <h2>Projeto 3</h2>

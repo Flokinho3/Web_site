@@ -1,22 +1,26 @@
 <?php
 session_start();
 
-if (empty($_SESSION['usuario']['id'])) {
-    header('Location: Home.html');
-    exit;
+//se nao estiver logado inicia a sessao como visitante
+if (!isset($_SESSION['usuario']['id']) || empty($_SESSION['usuario']['id'])) {
+    $_SESSION['usuario'] = [
+        'id' => 0,
+        'nome' => 'Visitante',
+        'img' => 'img_padrao.png'
+    ];
 }
 
 include_once '../System/alertas.php';
 include_once '../System/Redirecionar.php';
 
-$imagemUsuario = CorrigirImg($_SESSION['usuario']['img'], 1);
-
+$imagemUsuario = CorrigirImg($_SESSION['usuario']['img'], 1) ?? 'Users/1/Img/img_padrao.png';
+echo $imagemUsuario;
 // Pega o caminho do arquivo da URL
 $arquivo = $_GET['file'] ?? null;
 
 if (empty($arquivo) || !file_exists($arquivo)) {
     adicionarAlerta('erro', 'Arquivo de notícia inválido ou não encontrado!');
-    Redirecionar('Home.php');
+    header('Location: Home.php');
     exit;
 }
 
@@ -26,7 +30,7 @@ $dados = json_decode($conteudoJson, true);
 
 if (!$dados) {
     adicionarAlerta('erro', 'Erro ao ler os dados da notícia!');
-    Redirecionar('Home.php');
+    header('Location: Home.php');
     exit;
 }
 

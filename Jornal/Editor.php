@@ -4,6 +4,9 @@ session_start();
 
 include_once '../System/alertas.php';
 
+echo "<pre>";
+print_r($_SESSION);
+echo "</pre>";
 
 // Gere um CSRF token
 if (empty($_SESSION['csrf_token'])) {
@@ -92,6 +95,11 @@ if (empty($_SESSION['csrf_token'])) {
                 <option value="esportes">Esportes</option>
                 <option value="outros">outros</option>
             </select>
+
+            <label for="autor">Autor: <?php echo $_SESSION['usuario']['nome']; ?></label>
+            <input type="text" name="autor" value="<?php echo $_SESSION['usuario']['nome']; ?>" hidden>
+
+            <br>
 
             <!-- Adicione o token CSRF -->
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">

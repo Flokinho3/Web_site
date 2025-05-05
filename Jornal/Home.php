@@ -166,12 +166,7 @@ $pastas = glob($dir . '*', GLOB_ONLYDIR);
             }
             echo '.</p>';
             echo '</div>';
-        } else if ($total_noticias > $noticias_por_pagina) {
-            // Mostrar botão de "Carregar mais" apenas se houver mais notícias
-            echo '<div id="carregar-mais-container">';
-            echo '<a href="#" id="carregar-mais">Carregar mais notícias</a>';
-            echo '</div>';
-        }
+        } 
         ?>
         </div>
         <div class="loader">Carregando...</div>
