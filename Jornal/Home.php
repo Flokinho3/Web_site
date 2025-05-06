@@ -40,6 +40,7 @@ $pastas = glob($dir . '*', GLOB_ONLYDIR);
             <ul>
                 <li><a href="Home.php">Primeira Página</a></li>
                 <li><a href="Editor.php">Redação</a></li>
+                <li><a href="Noticias_mundo.php">Nacional</a></li>
                 <li><a href="../Server/Sair.php">Encerrar Leitura</a></li>
             </ul>
         </nav>
@@ -197,7 +198,7 @@ $pastas = glob($dir . '*', GLOB_ONLYDIR);
                 $('.loader').show();
                 
                 $.ajax({
-                    url: 'Carregar_mais.php',
+                    url: 'Local.php',
                     type: 'GET',
                     data: {
                         pagina: pagina,

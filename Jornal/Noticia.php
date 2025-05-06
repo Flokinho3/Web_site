@@ -14,7 +14,7 @@ include_once '../System/alertas.php';
 include_once '../System/Redirecionar.php';
 
 $imagemUsuario = CorrigirImg($_SESSION['usuario']['img'], 1) ?? 'Users/1/Img/img_padrao.png';
-echo $imagemUsuario;
+
 // Pega o caminho do arquivo da URL
 $arquivo = $_GET['file'] ?? null;
 
