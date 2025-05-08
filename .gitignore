@@ -48,3 +48,9 @@ System/*
 
 # Ignorar arquivos de teste usuarios
 Users/*
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de pesquisa
+cache/*
