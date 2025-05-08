@@ -35,7 +35,7 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
         </div>
         <div class="Top_bar_lista_atalhos">
             <ul>
-                <li><a href="Home.php">Home</a></li>
+                <li><a href="../Home/Home.php">Home</a></li>
                 <li><a href="Gerenciador.php">Inicio</a></li>
                 <li><a href="../Update.php">Updates</a></li>
                 <li><a href="../Server/Sair.php">Sair</a></li>
@@ -45,7 +45,8 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
     <div class="Sidebar">
         <h1>Gerenciador de Despesas</h1>
         <ul>
-            <li><a href="Cateira.php">Cateira</a></li>
+            <li><a href="Carteira.php">Cateira</a></li>
+            <li><a href="Historico.php">Hisotrico</a></li>
             <li><a href="Sobre.html">Sobre</a></li>
         </ul>
     </div>

@@ -8,6 +8,14 @@ require_once '../System/alertas.php';
 require_once 'Funcoes.php'; // Inclui o arquivo de funções de usuários
 require_once 'Seguranca.php'; // Inclui o arquivo de segurança
 
+function verificarUserLogado() {
+    if (empty($_SESSION['usuario']['id'])) {
+        adicionarAlerta('erro', 'Você precisa estar logado para acessar esta página!');
+        header('Location: ../index.php');
+        exit;
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificação do token CSRF para prevenir CSRF attacks
     verificarCsrfToken();
@@ -16,11 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? null;
     if ($acao === 'cadastrar') {
         // Validação básica para evitar dados maliciosos
-        if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            adicionarAlerta('erro', 'Email inválido!');
-            header('Location: ../index.php');
-            exit;
-        }
+        verificarUserLogado();
         Cadastro($_POST);
     } elseif ($acao === 'login') {
         // Validação básica para login
@@ -71,47 +75,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } elseif ($acao === 'excluir_img') {
         // Verifica se o usuário está logado
-        if (empty($_SESSION['usuario']['id'])) {
-            adicionarAlerta('erro', 'Você precisa estar logado para excluir a imagem!');
-            header('Location: ../index.php');
-            exit;
-        }
-    
+        verificarUserLogado();
         // Exclui a imagem do usuário
         ExcluirImg($_POST);
     } elseif ($acao === 'selecionar_img') {
         // Verifica se o usuário está logado
-        if (empty($_SESSION['usuario']['id'])) {
-            adicionarAlerta('erro', 'Você precisa estar logado para selecionar a imagem!');
-            header('Location: ../index.php');
-            exit;
-        }
+        verificarUserLogado();
 
         // Seleciona a imagem do usuário
         SelecionarImg($_POST);
     } elseif ($acao === 'add_saldo') {
         // Verifica se o usuário está logado
-        if (empty($_SESSION['usuario']['id'])) {
-            adicionarAlerta('erro', 'Você precisa estar logado para adicionar saldo!');
-            header('Location: ../index.php');
-            exit;
-        }
-
-        // Adiciona saldo ao usuário
+        verificarUserLogado();        // Adiciona saldo ao usuário
         AdicionarSaldo($_POST);
-    } elseif ($acao === 'add_despesa') {
+    } elseif ($acao == 'postar') {
         // Verifica se o usuário está logado
-        if (empty($_SESSION['usuario']['id'])) {
-            adicionarAlerta('erro', 'Você precisa estar logado para adicionar despesa!');
-            header('Location: ../index.php');
-            exit;
-        }
-
-        // Adiciona despesa ao usuário
-        AdicionarDespesa($_POST);
-
+        verificarUserLogado();
+        // Adiciona postagem ao usuário
+        AdicionarPostagem($_POST);
+    } elseif ($acao === 'postar') {
+        // Verifica se o usuário está logado
+        verificarUserLogado();
+        // Adiciona entrada ao usuário
+        AdicionarPostagem($_POST);        
         exit;
-    } else {
+    } elseif ($acao === 'deslike') {
+        verificarUserLogado();
+        header('Content-Type: application/json');
+        echo json_encode(Deslike($_POST));
+        exit;
+    } elseif ($acao === 'like') {
+        verificarUserLogado();
+        header('Content-Type: application/json');
+        echo json_encode(Like($_POST));
+        exit;
+    } elseif ($acao === 'excluir_postagem') {
+        // Verifica se o usuário está logado
+        verificarUserLogado();
+        // Exclui a postagem do usuário
+        ExcluirPostagem($_POST); 
+    } elseif ($acao === 'editar_postagem') {
+        // Verifica se o usuário está logado
+        verificarUserLogado();
+        // Edita a postagem do usuário
+        EditarPostagem($_POST); 
+    }
+    
+    else {
         adicionarAlerta('erro', 'Ação inválida!');
         header('Location: ../index.php');
         exit;

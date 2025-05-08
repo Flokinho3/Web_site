@@ -55,8 +55,9 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
                 <a href="../Gerenciador/Gerenciador.php">Acessar</a>
             </div>
             <div class="projeto">
-                <h2>Projeto 3</h2>
-                <p>Descrição do projeto 3.</p>
+                <h2>ChatVerse</h2>
+                <p>Um universo de conversas e conexões.</p>
+                <a href="../ChatVerse/Home.php">Acessar</a>
             </div>
         </div>
     </div>
@@ -66,7 +67,8 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
     <div class="footer">
         <p>&copy; 2023 Thiago da silva. Todos os direitos reservados.</p>
         <p>Desenvolvido por Thiago da silva</p>
-        <p>Contato:</p>
+        <p>Contato: thiagosiegamg@gmail.com</p>
+        <p>GitHub: <a href="https://github.com/Flokinho3">Flokinho3</a></p>
     </div>
 </body>
 </html>

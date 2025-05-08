@@ -16,6 +16,14 @@
   	3	Senha	text	    utf8mb4_unicode_ci	Nenhum				
  	4	Niki	text	    utf8mb4_unicode_ci	Nenhum				
  	5	Img	    text	    utf8mb4_unicode_ci	'Padrao.png'	
+    ==================================================
+    Tabela: Postagem
+    #	Nome	    Tipo	        Colação	            Padrão		Extra   
+	1	ID	        int(11)						        nenhum		
+	2	Certificado	text	        utf8mb4_unicode_ci  nenhum		
+	3	Like	    int(11)						        0		
+	4	Deslike	    int(11)						        0		
+
 
 */
 
@@ -385,7 +393,6 @@ function AdicionarSaldo($dados) {
     exit;
 }
 
-
 function AdicionarDespesa($dados) {
     $FILE_Notas = "../Users/{$_SESSION['usuario']['id']}/Notas/Valores.json";
     $conexao = conectar();
@@ -462,4 +469,154 @@ function AdicionarDespesa($dados) {
     exit;
 }
 
+function AdicionarPostagem($dados) {
+    $id = $_SESSION['usuario']['id'];
+    $nome = $_SESSION['usuario']['nome'] ?? 'Usuário';
+    $ID_unico = bin2hex(random_bytes(10)); // Gera uma senha única de 20 caracteres
+
+    // Título com fallback para nome, se não vier preenchido
+    $titulo = isset($dados['Titulo']) && trim($dados['Titulo']) !== ''
+        ? trim($dados['Titulo'])
+        : $nome;
+    $titulo = htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8');
+
+    // Conteúdo validado com strip_tags (remove HTML visualmente vazio)
+    $conteudoBruto = trim($dados['Conteudo'] ?? '');
+    $conteudoSemTags = trim(strip_tags($conteudoBruto));
+
+    if (empty($conteudoSemTags)) {
+        adicionarAlerta('erro', 'Conteúdo não pode estar vazio!');
+        exit;
+    }
+
+    if (strlen($conteudoSemTags) > 500) {
+        adicionarAlerta('erro', 'Conteúdo não pode ter mais de 500 caracteres!');
+        
+        exit;
+    }
+
+    $data = date('Y-m-d_H-i-s');
+    $file = "../Users/{$id}/Postagem/{$ID_unico}.json";
+
+    // Verifica se o arquivo já existe e gera um novo ID único até encontrar um nome disponível
+    while (file_exists($file)) {
+        $ID_unico = bin2hex(random_bytes(10)); // Gera um novo ID único
+        $file = "../Users/{$id}/Postagem/{$ID_unico}.json";
+    }
+
+    // Garante que o diretório exista
+    if (!is_dir(dirname($file))) {
+        mkdir(dirname($file), 0777, true);
+    }
+
+    // Monta os dados
+    $postagem = [
+        'id' => $id,
+        'titulo' => $titulo,
+        'img' => $_SESSION['usuario']['img'] ?? 'Padrao.png',
+        'conteudo' => $conteudoBruto, // mantém HTML do TinyMCE
+        'data' => $data,
+        'visibilidade' => $dados['visibilidade'] ?? 'publico',
+        'ID_unico' => $ID_unico,
+    ];
+
+    // salva no banco de dados
+    $conexao = conectar();
+    $stmt = $conexao->prepare("INSERT INTO Postagem (ID, Certificado) VALUES (:id, :certificado)");
+    $certificado = $ID_unico; // Salva apenas o ID_unico no certificado
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':certificado', $certificado);
+    $stmt->execute();
+
+    // Verifica se a inserção foi bem-sucedida
+    if ($stmt->rowCount() === 0) {
+        adicionarAlerta('erro', 'Erro ao adicionar postagem no banco de dados!');
+        exit;
+    }  
+
+
+
+    // Salva no arquivo JSON (um post por arquivo)
+    file_put_contents($file, json_encode($postagem, JSON_PRETTY_PRINT));
+
+
+    $logFile = "../Users/{$id}/Postagem/Log.txt";
+    $logMessage = "Postagem '{$titulo}' adicionada em " . date('Y-m-d H:i:s') . "\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+    adicionarAlerta('sucesso', 'Postagem adicionada com sucesso!');
+    header('Location: ../Home/Home.php');
+    exit;
+}
+
+function Deslike($dados) {
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+    $ID_unico = $dados['ID_unico'];
+
+    // Verifica se já descurtiu
+    $stmt = $conexao->prepare("SELECT 1 FROM Reacoes WHERE usuario_id = :id AND certificado = :certificado AND tipo = 'deslike'");
+    $stmt->execute([':id' => $id, ':certificado' => $ID_unico]);
+    $jaDescurtiu = $stmt->fetch();
+
+    if ($jaDescurtiu) {
+        $conexao->prepare("UPDATE Postagem SET `Deslike` = `Deslike` - 1 WHERE Certificado = :certificado")
+                ->execute([':certificado' => $ID_unico]);
+
+        $conexao->prepare("DELETE FROM Reacoes WHERE usuario_id = :id AND certificado = :certificado AND tipo = 'deslike'")
+                ->execute([':id' => $id, ':certificado' => $ID_unico]);
+    } else {
+        $conexao->prepare("UPDATE Postagem SET `Deslike` = `Deslike` + 1 WHERE Certificado = :certificado")
+                ->execute([':certificado' => $ID_unico]);
+
+        $conexao->prepare("INSERT IGNORE INTO Reacoes (usuario_id, certificado, tipo) VALUES (:id, :certificado, 'deslike')")
+                ->execute([':id' => $id, ':certificado' => $ID_unico]);
+    }
+
+    // Retorna contagem atualizada
+    $stmt = $conexao->prepare("SELECT `Like`, `Deslike` FROM Postagem WHERE Certificado = :certificado");
+    $stmt->execute([':certificado' => $ID_unico]);
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return [
+        'likes' => (int) $resultado['Like'],
+        'deslikes' => (int) $resultado['Deslike']
+    ];
+}
+
+
+function Like($dados) {
+    $conexao = conectar();
+    $id = $_SESSION['usuario']['id'];
+    $ID_unico = $dados['ID_unico'];
+
+    // Verifica se já curtiu
+    $stmt = $conexao->prepare("SELECT 1 FROM Reacoes WHERE usuario_id = :id AND certificado = :certificado AND tipo = 'like'");
+    $stmt->execute([':id' => $id, ':certificado' => $ID_unico]);
+    $jaCurtiu = $stmt->fetch();
+
+    if ($jaCurtiu) {
+        $conexao->prepare("UPDATE Postagem SET `Like` = `Like` - 1 WHERE Certificado = :certificado")
+                ->execute([':certificado' => $ID_unico]);
+
+        $conexao->prepare("DELETE FROM Reacoes WHERE usuario_id = :id AND certificado = :certificado AND tipo = 'like'")
+                ->execute([':id' => $id, ':certificado' => $ID_unico]);
+    } else {
+        $conexao->prepare("UPDATE Postagem SET `Like` = `Like` + 1 WHERE Certificado = :certificado")
+                ->execute([':certificado' => $ID_unico]);
+
+        $conexao->prepare("INSERT IGNORE INTO Reacoes (usuario_id, certificado, tipo) VALUES (:id, :certificado, 'like')")
+                ->execute([':id' => $id, ':certificado' => $ID_unico]);
+    }
+
+    // Retorna contagem atualizada
+    $stmt = $conexao->prepare("SELECT `Like`, `Deslike` FROM Postagem WHERE Certificado = :certificado");
+    $stmt->execute([':certificado' => $ID_unico]);
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return [
+        'likes' => (int) $resultado['Like'],
+        'deslikes' => (int) $resultado['Deslike']
+    ];
+}
 ?>
