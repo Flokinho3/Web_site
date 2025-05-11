@@ -2,6 +2,7 @@
 // Configurações
 const GNEWS_KEY      = '7ab6c2c2eba0b51b656653b74ba8a881';
 const GNEWS_ENDPOINT = 'https://gnews.io/api/v4/search';
+include_once __DIR__ . '/../System/Alerta.php';
 $cacheDir  = __DIR__ . '/../cache';
 $cacheFile = "$cacheDir/gnews_data.json";
 $logFile   = "$cacheDir/requests_log.json";
@@ -18,7 +19,8 @@ $log = file_exists($logFile) ? json_decode(file_get_contents($logFile), true) : 
 $log[$hoje] = $log[$hoje] ?? [];
 
 if (count($log[$hoje]) >= 99) {
-    exit('⚠️ Limite diário de requisições atingido. JSON mantido.');
+    adicionarAlerta('Limite de requisições diárias atingido. Atualização não realizada.');
+    exit('❌ Limite de requisições diárias atingido. Atualização não realizada.');
 }
 
 // Monta a requisição para GNews
@@ -40,6 +42,7 @@ $error    = curl_error($ch);
 curl_close($ch);
 
 if ($error || !$response) {
+    adicionarAlerta('Erro ao buscar dados da API: ' . $error);
     exit('❌ Erro ao buscar dados da API: ' . $error);
 }
 
@@ -51,4 +54,6 @@ file_put_contents($cacheFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCA
 $log[$hoje][] = date('H:i:s');
 file_put_contents($logFile, json_encode($log, JSON_PRETTY_PRINT));
 
-echo '✅ Cache atualizado com sucesso às ' . date('H:i:s') . '. Total de requisições hoje: ' . count($log[$hoje]);
+// Adiciona alerta de sucesso
+adicionarAlerta('✅ Cache atualizado com sucesso às ' . date('H:i:s') . '. Total de requisições hoje: ' . count($log[$hoje]));
+
