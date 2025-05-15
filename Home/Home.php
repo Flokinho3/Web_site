@@ -49,16 +49,6 @@ $IMG_USER = CorrigirImg($_SESSION['usuario']['img'],1);
                 <p>Um pequeno jornal com as informaçoes locais!</p>
                 <a href="../Jornal/Home.php">Acessar</a>
             </div>
-            <div class="projeto">
-                <h2>Gerenciador de Despesas</h2>
-                <p>Um sistema para gerenciar suas despesas financeiras.</p>
-                <a href="../Gerenciador/Gerenciador.php">Acessar</a>
-            </div>
-            <div class="projeto">
-                <h2>ChatVerse</h2>
-                <p>Um universo de conversas e conexões.</p>
-                <a href="../ChatVerse/Home.php">Acessar</a>
-            </div>
         </div>
     </div>
     
