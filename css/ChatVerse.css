@@ -1,0 +1,497 @@
+/* =======================
+   Tema ChatVerse - Paisagem Natural
+========================== */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+/* Variáveis CSS */
+:root {
+    --primary-color: rgba(26, 45, 91, 0.8);
+    --secondary-color: rgba(230, 57, 70, 0.9);
+    --accent-color: rgba(249, 199, 79, 0.9);
+    --light-bg: rgba(255, 255, 255, 0.65);
+    --lighter-bg: rgba(255, 255, 255, 0.85);
+    --dark-text: #212529;
+    --light-text: #f8f9fa;
+    --header-font: 'Playfair Display', serif;
+    --body-font: 'Source Sans Pro', sans-serif;
+    --transition: all 0.3s ease;
+    --sidebar-width: 250px;
+    --glass-effect: backdrop-filter: blur(10px);
+}
+
+/* RESET & BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--body-font);
+    color: var(--dark-text);
+    line-height: 1.6;
+    padding-bottom: 2rem;
+    padding-top: 70px;
+    padding-left: var(--sidebar-width);
+    background-image: url('../img/Fundo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    backdrop-filter: blur(5px);
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =======================
+   TOPO / HEADER
+========================== */
+.Top_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    height: 70px;
+    background: var(--light-bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    var(--glass-effect);
+}
+
+.Top_bar_Img {
+    display: flex;
+    align-items: center;
+}
+
+.Top_bar_Img_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    object-fit: cover;
+    transition: var(--transition);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.Top_bar_Img_usuario:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: white;
+}
+
+.Top_bar_lista_atalhos ul {
+    display: flex;
+    list-style: none;
+}
+
+.Top_bar_lista_atalhos li {
+    margin: 0 5px;
+}
+
+.Top_bar_lista_atalhos a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.Top_bar_lista_atalhos a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--secondary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.Top_bar_lista_atalhos a:hover:after {
+    width: 70%;
+}
+
+.Top_bar_lista_atalhos a:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+}
+
+/* =======================
+   SIDEBAR
+========================== */
+.Sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--light-bg);
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+    padding: 30px 0;
+    z-index: 800;
+    animation: fadeIn 0.5s ease;
+    var(--glass-effect);
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.Sidebar h1 {
+    text-align: center;
+    color: var(--dark-text);
+    font-family: var(--header-font);
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.Sidebar ul {
+    list-style: none;
+    padding: 0 20px;
+}
+
+.Sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.Sidebar ul li a {
+    display: block;
+    padding: 12px 15px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: var(--transition);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.Sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: translateX(5px);
+}
+
+/* =======================
+   CONTEÚDO PRINCIPAL
+========================== */
+.container {
+    background-color: rgba(255, 255, 255, 0.7); /* branco fosco */
+    backdrop-filter: blur(10px); /* efeito glass */
+    border-radius: 15px;
+    padding: 30px;
+    margin: 40px auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    animation: fadeIn 0.5s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+
+/* =======================
+   ÁREA DE POSTAGEM
+========================== */
+.Postar {
+    background: var(--light-bg);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease;
+    var(--glass-effect);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.Postar h1 {
+    font-family: var(--header-font);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.Postar h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 2px;
+}
+
+.Postar form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.Postar input[type="text"],
+.Postar textarea {
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
+    font-family: var(--body-font);
+    font-size: 1rem;
+    transition: var(--transition);
+    color: var(--dark-text);
+}
+
+.Postar input[type="text"]:focus,
+.Postar textarea:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.Postar button {
+    padding: 12px 25px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    margin-top: 10px;
+    align-self: center;
+    width: 150px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Postar button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    background-color: var(--primary-color);
+}
+
+/* =======================
+   POSTS
+========================== */
+.Posts {
+    margin-top: 30px;
+}
+
+.Post {
+    background: var(--lighter-bg);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.6s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: var(--transition);
+}
+
+.Post-Header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.Post-User-Img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid white;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.Post-User-Info h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--dark-text);
+    font-weight: 700;
+}
+
+.Post-User-Info p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+.Post-Content {
+    margin-top: 15px;
+    color: var(--dark-text);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.Post-Footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.Post-Actions button {
+    background: transparent;
+    border: none;
+    color: var(--dark-text);
+    cursor: pointer;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    transition: var(--transition);
+    border-radius: 6px;
+}
+
+.Post-Actions button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.Post-Options {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.Post-Options form {
+    display: inline;
+}
+
+.Post-Options button {
+    background-color: transparent;
+    border: 1px solid var(--secondary-color);
+    color: var(--dark-text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.Post-Options button:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* =======================
+   RESPONSIVIDADE
+========================== */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    body {
+        padding-left: 0;
+    }
+    
+    .Sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .container {
+        padding: 20px;
+        margin: 20px;
+    }
+    
+    .Postar h1 {
+        font-size: 1.8rem;
+    }
+    
+    .Top_bar_lista_atalhos a {
+        padding: 8px 12px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .Top_bar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 5%;
+    }
+    
+    .Top_bar_lista_atalhos ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .Top_bar_lista_atalhos a {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .Postar {
+        padding: 20px;
+    }
+    
+    .Postar h1 {
+        font-size: 1.5rem;
+    }
+    
+    .Postar button {
+        width: 100%;
+    }
+}
+
+/* Botão para mostrar sidebar em dispositivos móveis */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .Sidebar.active {
+        transform: translateX(0);
+    }
+}

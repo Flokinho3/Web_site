@@ -1,0 +1,56 @@
+# Arquivos do XAMPP
+.modell
+.modell-usb
+.version
+*.pid
+*.log
+
+# Configurações específicas de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de cache/comuns
+*.bak
+*.tmp
+*.swp
+
+# Composer e vendor
+/vendor/
+/composer.lock
+
+# Informações sensíveis
+Server/Server.php
+config.php
+.env
+
+# Uploads e arquivos temporários
+/uploads/
+*.zip
+*.tar.gz
+
+# Banco de dados exportado
+*.sql
+*.sql.gz
+
+# Node (caso use assets via npm)
+node_modules/
+package-lock.json
+
+# Ignorar tudo da pasta System menos os scripts PHP
+System/*
+!System/*.php
+
+# Ignorar arquivos de teste usuarios
+Users/*
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de pesquisa
+cache/*

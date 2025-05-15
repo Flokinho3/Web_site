@@ -1,0 +1,350 @@
+/* Tema Galáxia para Perfil - baseado no Home.css */
+
+/* Reset e configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Efeito de fundo da galáxia */
+body {
+    background: linear-gradient(to bottom, #0c0118, #1a0933, #150426);
+    background-attachment: fixed;
+    color: #e0e0ff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Estrelas no fundo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px);
+    background-size: 50px 50px;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* Barra superior */
+.Top_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 2rem;
+    background: rgba(20, 12, 40, 0.8);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px 2px rgba(138, 43, 226, 0.3);
+    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.Top_bar_Img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.7);
+    transition: transform 0.3s ease;
+}
+
+.Top_bar_Img img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(157, 104, 255, 1);
+}
+
+.Top_bar_lista_atalhos ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.Top_bar_lista_atalhos a {
+    color: #9d68ff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(157, 104, 255, 0.5);
+}
+
+.Top_bar_lista_atalhos a:hover {
+    background: rgba(157, 104, 255, 0.2);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.5);
+    text-shadow: 0 0 8px rgba(157, 104, 255, 1);
+}
+
+/* Container principal */
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+    background: rgba(20, 12, 40, 0.6);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(76, 0, 255, 0.3);
+    border: 1px solid rgba(76, 0, 255, 0.2);
+}
+
+.container h1 {
+    font-size: 2.3rem;
+    margin-bottom: 2rem;
+    color: #9d68ff;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(157, 104, 255, 0.6);
+}
+
+/* Seção de informações do usuário */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: rgba(30, 15, 60, 0.7);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(76, 0, 255, 0.3);
+    border: 1px solid rgba(76, 0, 255, 0.2);
+    animation: pulse 3s infinite alternate;
+}
+
+.user-info p {
+    font-size: 1.2rem;
+    color: #e0e0ff;
+    text-align: center;
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: rgba(20, 12, 40, 0.4);
+    margin: 0.5rem 0;
+}
+
+.user-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #9d68ff;
+    box-shadow: 0 0 20px rgba(157, 104, 255, 0.8);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 1rem;
+}
+
+.user-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(157, 104, 255, 1);
+}
+
+/* Carrossel de imagens */
+.Troca_img {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: rgba(30, 15, 60, 0.7);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(76, 0, 255, 0.3);
+    border: 1px solid rgba(76, 0, 255, 0.2);
+}
+
+.Troca_img h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #9d68ff;
+    text-align: center;
+    text-shadow: 0 0 5px #9d68ff;
+}
+
+.carousel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(20, 12, 40, 0.4);
+}
+
+.carousel-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.carousel-item:hover {
+    transform: translateY(-5px);
+}
+
+.carousel-image {
+    border: 3px solid #9d68ff;
+    box-shadow: 0 0 15px rgba(157, 104, 255, 0.7);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.carousel-image:hover {
+    border-color: #68c5ff;
+    box-shadow: 0 0 20px rgba(104, 197, 255, 1);
+    transform: scale(1.05);
+}
+
+/* Botões do carrossel */
+.delete-button, .select-button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0.3rem;
+    min-width: 100px;
+    text-align: center;
+}
+
+.delete-button {
+    background: linear-gradient(45deg, #ff2e6b, #ff6b9d);
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 46, 107, 0.5);
+}
+
+.select-button {
+    background: linear-gradient(45deg, #4c00ff, #9d68ff);
+    color: white;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.5);
+}
+
+.delete-button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #ff3e7b, #ff7bad);
+    box-shadow: 0 5px 15px rgba(255, 46, 107, 0.7);
+}
+
+.select-button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #5c20ff, #ad78ff);
+    box-shadow: 0 5px 15px rgba(157, 104, 255, 0.7);
+}
+
+/* Formulário de upload */
+.Troca_img form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: rgba(20, 12, 40, 0.4);
+}
+
+.Troca_img input[type="file"] {
+    background: rgba(20, 12, 40, 0.6);
+    border: 1px solid #9d68ff;
+    padding: 0.8rem;
+    border-radius: 8px;
+    color: #e0e0ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.Troca_img input[type="file"]:hover {
+    border-color: #68c5ff;
+    box-shadow: 0 0 10px rgba(104, 197, 255, 0.5);
+}
+
+.Troca_img button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(45deg, #4c00ff, #9d68ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.5);
+    animation: pulse 2s infinite alternate;
+}
+
+.Troca_img button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #5c20ff, #ad78ff);
+    box-shadow: 0 5px 15px rgba(157, 104, 255, 0.7);
+}
+
+/* Animações */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 15px 2px rgba(138, 43, 226, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 20px 5px rgba(138, 43, 226, 0.5);
+    }
+}
+
+/* Botões de edição */
+.edit-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.edit-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(45deg, #4c00ff, #9d68ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(157, 104, 255, 0.5);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.edit-button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #5c20ff, #ad78ff);
+    box-shadow: 0 5px 15px rgba(157, 104, 255, 0.7);
+}
+
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .Top_bar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .Top_bar_lista_atalhos ul {
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    .user-info {
+        padding: 1rem;
+    }
+}
