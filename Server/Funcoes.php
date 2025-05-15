@@ -28,6 +28,28 @@
 */
 
 include_once '../System/alertas.php'; // Inclui o arquivo de alertas
+if (!file_exists('Server.php')) {
+    echo '<!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Arquivo Removido</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f8d7da; color: #721c24; padding: 40px; }
+            .container { background: #fff; border: 1px solid #f5c6cb; border-radius: 8px; max-width: 400px; margin: 60px auto; padding: 30px; text-align: center; }
+            h1 { font-size: 1.6em; margin-bottom: 18px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Arquivo Removido por Segurança</h1>
+            <p>O arquivo <strong>Server.php</strong> não foi encontrado.<br>
+            Por motivos de segurança, a execução foi interrompida.</p>
+        </div>
+    </body>
+    </html>';
+    exit;
+}
 include_once 'Server.php'; // Inclui o arquivo de conexao com o banco de dados
 
 function valorExiste($conexao, string $campo, string $valor): bool {
